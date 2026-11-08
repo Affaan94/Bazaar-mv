@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maldives Multi-Vendor Marketplace</title>
+    <style>
+        :root {
+            --primary: #007A87; /* Maldivian Teal */
+            --secondary: #E31C79; /* Vibrant Coral/Pink */
+            --accent: #FFB81C; /* Sunny Yellow */
+            --dark: #2C3E50;
+            --light: #F4F6F7;
+            --white: #FFFFFF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            padding-bottom: 60px;
+        }
+
+        header {
+            background-color: var(--primary);
+            color: var(--white);
+            padding: 15px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 1.2rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .search-bar {
+            max-width: 600px;
+            margin: 10px auto 0 auto;
+            display: flex;
+        }
+
+        .search-bar input {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 5px 0 0 5px;
+            outline: none;
+        }
+
+        .search-bar button {
+            background-color: var(--secondary);
+            color: var(--white);
+            border: none;
+            padding: 10px 15px;
+            border-radius: 0 5px 5px 0;
+            cursor: pointer;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 15px;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            margin: 20px 0 10px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .section-title a {
+            font-size: 0.85rem;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        /* Categories */
+        .categories {
+            display: flex;
+            gap: 15px;
+            overflow-x: auto;
+            padding: 5px 0;
+            scrollbar-width: none;
+        }
+        .categories::-webkit-scrollbar { display: none; }
+
+        .category-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 70px;
+            cursor: pointer;
+        }
+
+        .category-icon {
+            width: 50px;
+            height: 50px;
+            background-color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            margin-bottom: 5px;
+        }
+
+        .category-item span {
+            font-size: 0.75rem;
+            text-align: center;
+        }
+
+        /* Vendors */
+        .vendors {
+            display: flex;
+            gap: 15px;
+            overflow-x: auto;
+            padding: 5px 0;
+            scrollbar-width: none;
+        }
+        .vendors::-webkit-scrollbar { display: none; }
+
+        .vendor-card {
+            background: var(--white);
+            border-radius: 10px;
+            min-width: 140px;
+            padding: 10px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .vendor-img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: #eee;
+            margin: 0 auto 8px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .vendor-card h4 {
+            font-size: 0.85rem;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .vendor-meta {
+            font-size: 0.7rem;
+            color: #7f8c8d;
+        }
+
+        /* Products Grid */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .product-card {
+            background: var(--white);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            position: relative;
+        }
+
+        .product-thumb {
+            height: 120px;
+            background-color: #eaeded;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+        }
+
+        .product-details {
+            padding: 10px;
+        }
+
+        .product-vendor {
+            font-size: 0.7rem;
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .product-title {
+            font-size: 0.85rem;
+            margin: 4px 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .product-price {
+            font-weight: bold;
+            color: var(--dark);
+            font-size: 0.9rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .add-btn {
+            background-color: var(--primary);
+            color: var(--white);
+            border: none;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .island-tag {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.65rem;
+        }
+
+        /* Bottom Nav */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--white);
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.05);
+            max-width: 600px;
+            margin: 0 auto;
+            z-index: 100;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #7f8c8d;
+            font-size: 0.7rem;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+        }
+
+        .nav-icon {
+            font-size: 1.2rem;
+            margin-bottom: 2px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-container">
+            <div class="logo">🇲🇻 DhivehiMarket</div>
+            <div>🛒 <span id="cart-count">0</span></div>
+        </div>
+        <div class="search-bar">
+            <input type="text" placeholder="Search shops, fish, short eats...">
+            <button>Search</button>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Categories -->
+        <div class="section-title">
+            <h3>Categories</h3>
+        </div>
+        <div class="categories">
+            <div class="category-item">
+                <div class="category-icon">🐟</div>
+                <span>Fresh Fish</span>
+            </div>
+            <div class="category-item">
+                <div class="category-icon">🍰</div>
+                <span>Short Eats</span>
+            </div>
+            <div class="category-item">
+                <div class="category-icon">👕</div>
+                <span>Clothing</span>
+            </div>
+            <div class="category-item">
+                <div class="category-icon">🏡</div>
+                <span>Local Crafts</span>
+            </div>
+            <div class="category-item">
+                <div class="category-icon">🍉</div>
+                <span>Produce</span>
+            </div>
+        </div>
+
+        <!-- Featured Vendors -->
+        <div class="section-title">
+            <h3>Featured Vendors</h3>
+            <a href="#">View All</a>
+        </div>
+        <div class="vendors">
+            <div class="vendor-card">
+                <div class="vendor-img">MF</div>
+                <h4>Malé Fish Market</h4>
+                <div class="vendor-meta">📍 Malé</div>
+            </div>
+            <div class="vendor-card">
+                <div class="vendor-img">HB</div>
+                <h4>Hulhumalé Bakes</h4>
+                <div class="vendor-meta">📍 Hulhumalé</div>
+            </div>
+            <div class="vendor-card">
+                <div class="vendor-img">VK</div>
+                <h4>Villingili Crafts</h4>
+                <div class="vendor-meta">📍 Villingili</div>
+            </div>
+        </div>
+
+        <!-- Recent Products -->
+        <div class="section-title">
+            <h3>Daily Delights</h3>
+        </div>
+        <div class="products-grid">
+            <div class="product-card">
+                <span class="island-tag">Malé</span>
+                <div class="product-thumb">🐟</div>
+                <div class="product-details">
+                    <div class="product-vendor">Malé Fish Market</div>
+                    <div class="product-title">Fresh Skipjack Tuna (Kandu Mas)</div>
+                    <div class="product-price">
+                        <span>MVR 45 / kg</span>
+                        <button class="add-btn" onclick="addToCart()">+</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <span class="island-tag">Hulhumalé</span>
+                <div class="product-thumb">🥟</div>
+                <div class="product-details">
+                    <div class="product-vendor">Hulhumalé Bakes</div>
+                    <div class="product-title">Spicy Gulha (Box of 20)</div>
+                    <div class="product-price">
+                        <span>MVR 60</span>
+                        <button class="add-btn" onclick="addToCart()">+</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <span class="island-tag">Thoddoo</span>
+                <div class="product-thumb">🍉</div>
+                <div class="product-details">
+                    <div class="product-vendor">Thoddoo Farmers</div>
+                    <div class="product-title">Local Sweet Watermelon</div>
+                    <div class="product-price">
+                        <span>MVR 25 / kg</span>
+                        <button class="add-btn" onclick="addToCart()">+</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <span class="island-tag">Villingili</span>
+                <div class="product-thumb">👜</div>
+                <div class="product-details">
+                    <div class="product-vendor">Villingili Crafts</div>
+                    <div class="product-title">Handwoven Coir Tote Bag</div>
+                    <div class="product-price">
+                        <span>MVR 150</span>
+                        <button class="add-btn" onclick="addToCart()">+</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <nav class="bottom-nav">
+        <a class="nav-item active">
+            <span class="nav-icon">🏠</span>
+            <span>Home</span>
+        </a>
+        <a class="nav-item">
+            <span class="nav-icon">🏬</span>
+            <span>Shops</span>
+        </a>
+        <a class="nav-item">
+            <span class="nav-icon">📦</span>
+            <span>Orders</span>
+        </a>
+        <a class="nav-item">
+            <span class="nav-icon">👤</span>
+            <span>Profile</span>
+        </a>
+    </nav>
+
+    <script>
+        let count = 0;
+        function addToCart() {
+            count++;
+            document.getElementById('cart-count').innerText = count;
+        }
+    </script>
+</body>
+</html>
